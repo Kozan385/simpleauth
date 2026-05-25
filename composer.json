@@ -11,6 +11,6 @@
         "php": "^8.5"
     },
     "autoload": {
-        "psr-4": { "Simple-Auth\\": "src" }
+        "psr-4": { "SimpleAuth\\": "src" }
     }
 }
