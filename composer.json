@@ -1,0 +1,16 @@
+{
+    "name": "kozan385/simpleauth",
+    "type": "library",
+    "description": "Simple Authentication",
+    "keywords": [],
+    "license": "CC-BY-NC-4.0",
+    "authors": [
+        {"name": "Kozan"}
+    ],
+    "require": {
+        "php": "^8.5"
+    },
+    "autoload": {
+        "psr-4": { "Simple-Auth\\": "src" }
+    }
+}
