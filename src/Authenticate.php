@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 namespace SimpleAuth;
 
-use Exception;
 use PDO;
+use Exception;
+use SimpleAuth\Enums\Status;
+use SimpleAuth\Enums\Role;
+use SimpleAuth\Enums\Permissions;
+
 
 Class Authenticate {
 
@@ -24,6 +28,9 @@ Class Authenticate {
             1 => $stmt->fetch(PDO::FETCH_ASSOC),
             default => throw new Exception("Username not unique"),
         };
+        //Convert database string to ENUM.
+        $this->User['user_status'] = STATUS::tryFromName($this->User['user_status']) ?? STATUS::UNKNOWN;
+        $this->User['user_role'] = ROLE::tryFromName($this->User['user_role']) ?? STATUS::UNKNOWN;
         return $this;
     }
 
@@ -39,11 +46,16 @@ Class Authenticate {
     }
 
     public function authenticateWithPassword(string $password): Authenticate{
-        if(password_verify($password,$this->User['user_password'])){
-            $this->authenticated = true;
-            return $this;
+        if ($this->User['user_status']->value > 0) {
+            if(password_verify($password,$this->User['user_password'])){
+                $this->authenticated = true;
+                return $this;
+            } else {
+            throw new Exception("Authentication Failed");
+            }
+        } else {
+            throw new Exception($this->User['user_id'] . " tried to authenticate but is " . $this->User['user_id']->name . ".");
         }
-        throw new Exception("Authentication Failed");
     }
 
     public function isAuthenticated(): bool{
