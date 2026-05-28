@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace SimpleAuth;
 
-use BackedEnum;
 use PDO;
 use Exception;
 use SimpleAuth\Enums\ErrorCode;
 use SimpleAuth\Enums\Status;
 use SimpleAuth\Enums\Role;
-use SimpleAuth\Enums\Permissions;
 use SimpleAuth\Throwable\SimpleAuthException;
 
 Class Authenticate {
@@ -25,16 +23,16 @@ Class Authenticate {
         catch (\Exception $e) {
             throw new SimpleAuthException("Database Error",ErrorCode::DATABASE_ERROR->value, $e);
         }
-        if(!$this->Status::tryFrom(0)->name === "UNKNOWN")
+        if(is_null($this->Status::tryFrom(0)) || $this->Status::tryFrom(0)->name !== "UNKNOWN")
             throw new SimpleAuthException("Status Enum must have UNKNOWN with a value of 0",ErrorCode::INVALID_STATUS_ENUM->value);
-        if(!$this->Role::tryFrom(0)->name === "UNKNOWN")
+        if(is_null($this->Role::tryFrom(0)) || $this->Role::tryFrom(0)->name !== "UNKNOWN")
             throw new SimpleAuthException("Roles Enum must have UNKNOWN with a value of 0",ErrorCode::INVALID_ROLE_ENUM->value);
         echo "<h1>Welcome To Simple Auth!</h1><br>";
 
     }
 
     public function lookupUsername(string $username){
-        unset($this->User);
+        unset($this->User, $this->authenticated);
         $stmt = $this->Connection->prepare("SELECT * FROM users WHERE user_name =?;");
         $stmt->execute([$username]);
         $this->User = match($stmt->rowCount()){
@@ -65,10 +63,10 @@ Class Authenticate {
                 $this->authenticated = true;
                 return $this;
             } else {
-            throw new Exception("Authentication Failed");
+            throw new SimpleAuthException("Authentication Failed", ErrorCode::PASSWORD_AUTHENTICATION_FAILED);
             }
         } else {
-            throw new Exception($this->User['user_id'] . " tried to authenticate but is " . $this->User['user_id']->name . ".");
+            throw new Exception("User " . $this->User['user_id'] . " tried to authenticate but is " . $this->User['user_id']->name . ".");
         }
     }
 

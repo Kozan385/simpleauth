@@ -11,7 +11,7 @@ Enum Status : int{
     case LOCKED  = -1;
     case UNKNOWN = 0;
     case GOOD    = 1;
-    
+    case PRIVLIEGED = 255;    
 
     use TryFromName;
 }
