@@ -17,4 +17,5 @@ enum ErrorCode : int
     case USER_STATUS_ERROR = 3000;
     case USER_ACCOUNT_LOCKED = 3001;
     case USER_ACCOUNT_BANNED = 3002;
+    case PASSWORD_AUTHENTICATION_FAILED = 5000;
 }
