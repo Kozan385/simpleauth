@@ -9,6 +9,7 @@ enum ErrorCode : int
     case DATABASE_ERROR = 1000;
     case INVALID_STATUS_ENUM = 1001;
     case INVALID_ROLE_ENUM = 1002;
+    case INVALID_PERMISSION_ENUM = 1003;
     case USER_DATA_ERROR = 2000;
     case USERNAME_NOT_FOUND = 2001;
     case USERNAME_NOT_UNIQUE = 2002;

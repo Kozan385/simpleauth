@@ -27,11 +27,11 @@ class UserDTO
         //throw new \Exception('Not implemented');
     }
 
-    public function enumerate($statusEnum, $roleEnum){
+    public function enumerate(string $statusEnum, string $roleEnum){
         if(is_string($this->user_status))
-            $this->user_status = $statusEnum::tryFromName($this->user_status) ?? $this->from(0);
+            $this->user_status = $statusEnum::tryFromName($this->user_status) ?? $statusEnum::from(0);
         if(is_string($this->user_role))
-            $this->user_role = $roleEnum::tryFromName($this->user_role) ?? $this->from(0);
+            $this->user_role = $roleEnum::tryFromName($this->user_role) ?? $roleEnum::from(0);
         if(is_string($this->user_created))
             $this->user_created = DateTime::createFromFormat('Y-m-d',$this->user_created);
     }
